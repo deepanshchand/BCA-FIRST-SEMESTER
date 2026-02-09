@@ -1,0 +1,185 @@
+ /* General Body Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #312948; /* Dark purple background from the image */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Profile Card Container */
+        .profile-card {
+            width: 100%;
+            max-width: 400px; /* Adjust width to match the image */
+            background-color: #3b3252; /* Slightly lighter dark purple for the card */
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); /* Deeper shadow for depth */
+            text-align: center;
+            color: #ffffff;
+            position: relative; /* Needed for absolute positioning of the 'PRO' badge */
+        }
+
+        /* 'PRO' Badge */
+        .pro-badge {
+            position: absolute;
+            top: 25px; /* Adjust based on exact image position */
+            left: 25px; /* Adjust based on exact image position */
+            background-color: #f7d24a; /* Yellow color */
+            color: #312948; /* Dark text for contrast */
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Profile Image */
+        .profile-image-container {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            margin: 20px auto 15px; /* Adjust margin to align with image */
+            overflow: hidden; /* Ensure image stays within bounds */
+            border: 3px solid #6c5ce7; /* Subtle border color around image */
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.3); /* Soft glow matching the border */
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block; /* Remove extra space below image */
+            /* Using a placeholder image URL, replace with a real one if available */
+            background-color: #555; 
+        }
+
+        /* Name and Location */
+        .name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #f0f0f0;
+        }
+
+        .location {
+            font-size: 0.8rem;
+            color: #b0b5c0;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 400;
+        }
+
+        /* Description */
+        .description {
+            font-size: 0.9rem;
+            color: #d0d0d0;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            padding: 0 10px; /* Slight padding for the text block */
+        }
+
+        /* Action Buttons Container */
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* Space between buttons */
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-message {
+            background-color: #1abc9c; /* Teal/Turquoise color from image */
+            color: #ffffff;
+        }
+
+        .btn-message:hover {
+            background-color: #16a085;
+        }
+
+        .btn-following {
+            background-color: transparent;
+            border: 1px solid #1abc9c; /* Border color matching message button */
+            color: #1abc9c;
+        }
+
+        .btn-following:hover {
+            background-color: rgba(26, 188, 156, 0.1);
+            color: #ffffff;
+        }
+        
+        /* NEW: Social Media Links Container */
+        .social-links-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Space between icons */
+            margin-bottom: 30px; /* Space before skills section */
+        }
+
+        /* NEW: Individual Social Icon Link */
+        .social-icon-link {
+            display: inline-flex;
+            width: 30px;
+            height: 30px;
+            color: #b0b5c0; /* Light gray color for icons */
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        /* NEW: SVG Icon inside the link */
+        .social-icon {
+            width: 100%;
+            height: 100%;
+            fill: currentColor; /* Use the parent's color */
+        }
+
+        /* NEW: Hover effect for icons */
+        .social-icon-link:hover {
+            color: #1abc9c; /* Change color to the button color on hover */
+            transform: translateY(-2px);
+        }
+
+        /* Skills Section */
+        .skills-header {
+            text-align: left;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #b0b5c0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            padding-top: 20px; /* Space from buttons/social links */
+            border-top: 1px solid rgba(255, 255, 255, 0.1); /* Subtle divider */
+        }
+
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px; /* Space between skill tags */
+            justify-content: center; /* Center the tags if they don't fill the row */
+        }
+
+        .skill-tag {
+            background-color: rgba(206, 219, 227, 0.1); /* Semi-transparent white background */
+            color: #d0d0d0;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 400;
+            white-space: nowrap; /* Prevent tags from breaking */
+        }

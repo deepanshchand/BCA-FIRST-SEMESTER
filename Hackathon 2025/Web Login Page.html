@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Portal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #020202, #0a0a1a, #001a33);
+            background-size: 400% 400%;
+            animation: bgMove 12s ease infinite;
+            font-family: 'Inter', sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        @keyframes bgMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            height: 85vh;
+            display: flex;
+            background: rgba(20, 20, 20, 0.75);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 0 50px rgba(0, 115, 255, 0.25);
+            overflow: hidden;
+            animation: slideUp 0.8s ease;
+        }
+
+        @keyframes slideUp {
+            0% {
+                transform: translateY(40px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0px);
+                opacity: 1;
+            }
+        }
+
+        .left {
+            width: 55%;
+            padding: 40px 50px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .right {
+            width: 45%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: radial-gradient(circle, rgba(0, 140, 255, 0.25), transparent 60%);
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .switch {
+            display: flex;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .switch button {
+            flex: 1;
+            padding: 12px;
+            font-size: 15px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: white;
+            transition: 0.2s;
+        }
+
+        .activeTab {
+            background: #0077ff;
+            box-shadow: inset 0 0 10px #0044ff;
+        }
+
+        label {
+            font-size: 14px;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            opacity: 0.85;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.07);
+            color: white;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border: 1px solid #007bff;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
+        }
+
+        .loginBtn {
+            width: 100%;
+            margin-top: 25px;
+            padding: 15px;
+            background: #0066ff;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .loginBtn:hover {
+            background: #1188ff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 115, 255, 0.35);
+        }
+
+        /* ---------------------- NEW TEA CUP ANIMATION ---------------------- */
+
+        .tea-wrapper {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .cup {
+            width: 140px;
+            height: 70px;
+            background: #ffffff;
+            border-radius: 0 0 25px 25px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
+        }
+
+        .cup::before {
+            content: "";
+            position: absolute;
+            top: 15px;
+            right: -35px;
+            width: 38px;
+            height: 38px;
+            border: 6px solid #fff;
+            border-radius: 50%;
+        }
+
+        .plate {
+            width: 180px;
+            height: 20px;
+            background: white;
+            border-radius: 50px;
+            margin-top: 8px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .steam {
+            position: absolute;
+            top: -40px;
+            left: 62px;
+            width: 10px;
+            height: 50px;
+            animation: rise 3s infinite ease-in-out;
+        }
+
+        .steam span {
+            position: absolute;
+            bottom: 0;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: steamFlow 3s infinite ease-in-out;
+        }
+
+        .steam span:nth-child(1) {
+            left: -10px;
+            animation-delay: 0s;
+        }
+
+        .steam span:nth-child(2) {
+            left: 5px;
+            animation-delay: 0.5s;
+        }
+
+        .steam span:nth-child(3) {
+            left: 20px;
+            animation-delay: 1s;
+        }
+
+        @keyframes rise {
+            0% {
+                transform: translateY(0);
+                opacity: 0.2;
+            }
+
+            50% {
+                opacity: 0.9;
+            }
+
+            100% {
+                transform: translateY(-40px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes steamFlow {
+            0% {
+                transform: translateY(0) scale(0.5);
+            }
+
+            100% {
+                transform: translateY(-40px) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* ------------------------------------------------------------------- */
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="left" id="formArea">
+            <h1 id="loginTitle">Employee Login</h1>
+
+            <div class="switch">
+                <button id="empBtn" class="activeTab">Employee</button>
+                <button id="mgrBtn">Manager</button>
+            </div>
+
+            <div id="formFields">
+                <label>Employee ID</label>
+                <input type="text" placeholder="Enter your employee ID" />
+
+                <label>Full Name</label>
+                <input type="text" placeholder="Enter your full name" />
+
+                <label>Department</label>
+                <input type="text" placeholder="Enter your department" />
+
+                <label>Password</label>
+                <input type="password" placeholder="Enter password" />
+
+                <a href="employee.html">
+                    <button class="loginBtn">Continue →</button>
+                </a>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE TEA ANIMATION -->
+        <div class="right">
+            <div class="tea-wrapper">
+                <div class="steam">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="cup"></div>
+                <div class="plate"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const empBtn = document.getElementById("empBtn");
+        const mgrBtn = document.getElementById("mgrBtn");
+        const formFields = document.getElementById("formFields");
+        const loginTitle = document.getElementById("loginTitle");
+
+        empBtn.onclick = () => {
+            empBtn.classList.add("activeTab");
+            mgrBtn.classList.remove("activeTab");
+
+            loginTitle.innerText = "Employee Login";
+            formFields.innerHTML = `
+      <label>Employee ID</label>
+      <input type="text" placeholder="Enter your employee ID" />
+
+      <label>Full Name</label>
+      <input type="text" placeholder="Enter your full name" />
+
+      <label>Department</label>
+      <input type="text" placeholder="Enter your department" />
+
+      <label>Password</label>
+      <input type="password" placeholder="Enter password" />
+
+      <a href="employee.html"><button class="loginBtn">Continue →</button></a>
+    `;
+        };
+
+        mgrBtn.onclick = () => {
+            mgrBtn.classList.add("activeTab");
+            empBtn.classList.remove("activeTab");
+
+            loginTitle.innerText = "Manager Login";
+            formFields.innerHTML = `
+      <label>Manager ID</label>
+      <input type="text" placeholder="Enter manager ID" />
+
+      <label>Full Name</label>
+      <input type="text" placeholder="Enter full name" />
+
+      <label>Access PIN</label>
+      <input type="password" placeholder="Enter access PIN" />
+
+      <a href="Dashboard.html"><button class="loginBtn">Proceed →</button></a>
+    `;
+        };
+    </script>
+
+</body>
+
+</html>

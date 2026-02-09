@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SmartSlot Dashboard</title>
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- AOS Animations -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+/* ===== Body & Theme ===== */
+body {
+    font-family:'Poppins',sans-serif;
+    margin:0; padding:0;
+    transition: background 0.3s,color 0.3s;
+}
+body.dark-theme { background:#0d1117; color:#c9d1d9; }
+body.light-theme { background:#f4f7fb; color:#111; }
+
+/* ===== Fade animation ===== */
+.content-page { animation: fadeIn 0.5s ease-in-out; }
+@keyframes fadeIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
+
+/* ===== Sidebar ===== */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: linear-gradient(180deg,#161b22,#0d1117);
+    color: #c9d1d9;
+    padding-top: 20px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    transition: 0.4s ease-in-out;
+    z-index:1002;
+}
+.sidebar.collapsed { width: 70px; }
+.sidebar h2 { text-align:center; font-size:24px; margin-bottom:30px; color:#58a6ff; text-shadow:0 0 8px #58a6ff; }
+.sidebar a {
+    display: flex; align-items:center;
+    padding: 15px 25px;
+    color: #8b949e; font-size:18px;
+    margin-bottom:5px; border-radius:10px;
+    transition: 0.3s;
+    position: relative;
+}
+.sidebar a i { width:25px; }
+.sidebar a .badge-notif {
+    position:absolute; right:20px; top:15px;
+    background:#ff3c3c; color:#fff; border-radius:50%; padding:2px 6px;
+    font-size:12px; animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{ transform:scale(1);}50%{transform:scale(1.3);} }
+.sidebar a:hover { background:#161b22; color:#58a6ff; padding-left:35px; text-shadow:0 0 6px #58a6ff; }
+
+/* ===== Sidebar toggle ===== */
+#toggleSidebar { position:absolute; bottom:20px; left:50%; transform:translateX(-50%); cursor:pointer; }
+
+/* ===== Main Content ===== */
+.main { margin-left:260px; padding:25px; transition:margin-left 0.4s ease-in-out; }
+.sidebar.collapsed ~ .main { margin-left:80px; }
+
+/* ===== Cards ===== */
+.card { background:#161b22; color:#c9d1d9; border-radius:15px; transition: all 0.3s ease-in-out; }
+.card:hover { transform:scale(1.02); box-shadow:0 0 15px #58a6ff; }
+
+/* ===== Slot Boxes ===== */
+.slot-box { background:#161b22; border-radius:15px; padding:18px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; transition: all 0.3s ease-in-out; }
+.slot-box:hover { transform:scale(1.02); box-shadow:0 0 12px #58a6ff; }
+
+/* ===== Chat ===== */
+.chat-area { height:350px; overflow-y:auto; background:#161b22; border-radius:15px; padding:15px; }
+.message { padding:10px 15px; border-radius:10px; margin-bottom:8px; max-width:65%; transition: all 0.3s ease-in-out; }
+.from-manager { background:#0f62fe; color:white; margin-left:auto; box-shadow:0 0 5px #0f62fe; }
+.from-user { background:#21262d; color:#c9d1d9; box-shadow:0 0 5px #21262d; }
+
+/* ===== Chat Input ===== */
+.chat-input { display:flex; gap:10px; margin-top:10px; }
+.chat-input input { background:#0d1117; color:#c9d1d9; border:none; border-radius:10px; padding:10px; width:100%; }
+
+/* ===== Pop-Up ===== */
+.content-page.pop-up { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:80%; max-width:600px; max-height:80%; background:#161b22; border-radius:20px; padding:25px; box-shadow:0 0 25px #58a6ff; overflow-y:auto; z-index:1001; }
+.pop-up-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); z-index:1000; }
+.content-page.pop-up h2 { font-weight:700; color:#58a6ff; text-align:center; margin-bottom:20px; }
+
+/* ===== Charts ===== */
+canvas { background:#0d1117; border-radius:15px; }
+
+/* ===== Floating alerts ===== */
+.floating-alert { position:fixed; top:20px; right:20px; background:#0f62fe; color:#fff; padding:12px 20px; border-radius:10px; box-shadow:0 0 10px #0f62fe; animation: floatAlert 0.5s ease forwards; z-index:2000; }
+@keyframes floatAlert { 0%{opacity:0; transform:translateY(-50px);} 100%{opacity:1; transform:translateY(0);} }
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar { width:8px; }
+::-webkit-scrollbar-thumb { background:#30363d; border-radius:4px; }
+::-webkit-scrollbar-track { background:#0d1117; }
+
+</style>
+</head>
+
+<body class="dark-theme">
+
+<!-- ===== Sidebar ===== -->
+<div class="sidebar" data-aos="fade-right">
+    <h2>SmartSlot Ultimate</h2>
+    <a href="#" onclick="showPage('dashboard')"><i class="fa fa-home"></i> Dashboard</a>
+    <a href="#" onclick="showPage('myslot')"><i class="fa fa-box"></i> My Slot <span class="badge-notif" id="unreadBadge">10</span></a>
+    <a href="#" onclick="showPage('chat')"><i class="fa fa-comments"></i> Chat</a>
+    <a href="#" onclick="showPage('score')"><i class="fa fa-star"></i> Score</a>
+    <a href="#" onclick="showPage('settings')"><i class="fa fa-gear"></i> Settings</a>
+    <i class="fa fa-angle-double-left" id="toggleSidebar" onclick="toggleSidebar()"></i>
+</div>
+
+<div class="main">
+
+<!-- ===== Dashboard ===== -->
+<div id="dashboard" class="content-page">
+    <h2 class="mb-3" data-aos="fade-up">Dashboard Overview</h2>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm" data-aos="zoom-in">
+                <h4><i class="fa fa-box"></i> Total Slots</h4>
+                <p class="display-6" id="totalSlots">24</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm" data-aos="zoom-in">
+                <h4><i class="fa fa-circle text-danger"></i> Unread</h4>
+                <p class="display-6" id="totalUnread">10</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm" data-aos="zoom-in">
+                <h4><i class="fa fa-circle text-warning"></i> Pending</h4>
+                <p class="display-6" id="totalPending">10</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm" data-aos="zoom-in">
+                <h4><i class="fa fa-circle text-success"></i> Done</h4>
+                <p class="display-6" id="totalDone">4</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6 mb-3">
+            <canvas id="barChart"></canvas>
+        </div>
+        <div class="col-md-6 mb-3">
+            <canvas id="lineChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- ===== My Slot ===== -->
+<div id="myslot" class="content-page" style="display:none;">
+    <h2 class="mb-3" data-aos="fade-up">My Slots (24)</h2>
+    <div class="row">
+        <div class="col-md-4" id="unreadCol">
+            <h4 class="text-danger" data-aos="fade-right">Unread (10)</h4>
+        </div>
+        <div class="col-md-4" id="pendingCol">
+            <h4 class="text-warning" data-aos="fade-right">Pending (10)</h4>
+        </div>
+        <div class="col-md-4" id="completedCol">
+            <h4 class="text-success" data-aos="fade-right">Completed (4)</h4>
+        </div>
+    </div>
+</div>
+
+<!-- ===== Chat ===== -->
+<div id="chat" class="content-page" style="display:none;">
+    <h2 class="mb-3" data-aos="fade-up">Chat</h2>
+    <div class="chat-area mb-2" data-aos="fade-up" id="chatArea">
+        <div class="message from-manager" id="managerMsg">Please complete the UI update today.</div>
+        <div class="message from-user">Okay sir! Working on it.</div>
+    </div>
+    <div class="chat-input" data-aos="zoom-in">
+        <input class="form-control" id="chatInput" placeholder="Type a message...">
+        <button class="btn btn-primary" onclick="sendMessage()"><i class="fa fa-paper-plane"></i></button>
+    </div>
+</div>
+
+<!-- ===== Score ===== -->
+<div id="score" class="content-page" style="display:none;">
+    <h2 class="mb-3" data-aos="fade-up">Performance Score</h2>
+    <div class="card p-4 shadow-sm" data-aos="fade-up">
+        <h3>Your Score: <span class="text-success" id="scoreValue">84 / 100</span></h3>
+        <p>Good work! Finish tasks on time to increase score.</p>
+    </div>
+</div>
+
+<!-- ===== Settings ===== -->
+<div id="settings" class="content-page" style="display:none;">
+    <h2 data-aos="fade-up">Settings</h2>
+    <div class="card p-4 shadow-sm" data-aos="fade-up">
+        <label class="form-label">Notification</label>
+        <select class="form-select" id="notifSetting">
+            <option>On</option>
+            <option>Off</option>
+        </select>
+        <hr>
+        <label class="form-label">Theme</label>
+        <select class="form-select" id="themeSetting" onchange="changeTheme(this.value)">
+            <option>Dark</option>
+            <option>Light</option>
+        </select>
+    </div>
+</div>
+
+</div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({ duration: 800, once: true });
+
+// ===== Sidebar Toggle =====
+function toggleSidebar(){
+    document.querySelector(".sidebar").classList.toggle("collapsed");
+}
+
+// ===== Page Switch =====
+function showPage(pageName){
+    document.querySelectorAll(".content-page").forEach(p=>{
+        p.style.display="none"; p.classList.remove("pop-up");
+    });
+    const oldOverlay = document.querySelector(".pop-up-overlay"); if(oldOverlay) oldOverlay.remove();
+    const page=document.getElementById(pageName);
+
+    if(["chat","score","settings"].includes(pageName)){
+        page.style.display="block";
+        page.classList.add("pop-up");
+        const overlay=document.createElement("div");
+        overlay.className="pop-up-overlay";
+        overlay.onclick=()=>{ page.style.display="none"; overlay.remove(); }
+        document.body.appendChild(overlay);
+    } else { page.style.display="block"; }
+}
+
+// ===== Slot Boxes =====
+document.addEventListener("DOMContentLoaded",()=>{
+    const unreadCol=document.getElementById("unreadCol");
+    const pendingCol=document.getElementById("pendingCol");
+    const completedCol=document.getElementById("completedCol");
+    for(let i=1;i<=10;i++){
+        let div=document.createElement("div");
+        div.className="slot-box"; div.style.borderLeft="6px solid red";
+        div.innerHTML=`<h5>Unread Task ${i} <span class="badge bg-danger">Unread</span></h5>`;
+        unreadCol.appendChild(div);
+    }
+    for(let i=1;i<=10;i++){
+        let div=document.createElement("div");
+        div.className="slot-box"; div.style.borderLeft="6px solid orange";
+        div.innerHTML=`<h5>Pending Task ${i} <span class="badge bg-warning text-dark">Pending</span></h5>`;
+        pendingCol.appendChild(div);
+    }
+    for(let i=1;i<=4;i++){
+        let div=document.createElement("div");
+        div.className="slot-box"; div.style.borderLeft="6px solid green";
+        div.innerHTML=`<h5>Completed Task ${i} <span class="badge bg-success">Completed</span></h5>`;
+        completedCol.appendChild(div);
+    }
+});
+
+// ===== Chat Function =====
+function sendMessage(){
+    const input=document.getElementById("chatInput");
+    if(input.value.trim()==="") return;
+    const div=document.createElement("div");
+    div.className="message from-user"; div.textContent=input.value;
+    document.getElementById("chatArea").appendChild(div);
+    input.value="";
+    document.getElementById("chatArea").scrollTop=document.getElementById("chatArea").scrollHeight;
+
+    // Simulated manager typing
+    setTimeout(()=>{ animatedManagerMsg("Got it! Keep up the good work."); },800);
+}
+function animatedManagerMsg(text){
+    const chatArea=document.getElementById("chatArea");
+    const div=document.createElement("div"); div.className="message from-manager";
+    chatArea.appendChild(div);
+    let i=0;
+    const typing=setInterval(()=>{
+        div.textContent=text.slice(0,i);
+        i++;
+        if(i>text.length) clearInterval(typing);
+        chatArea.scrollTop=chatArea.scrollHeight;
+    },50);
+}
+
+// ===== Charts =====
+const barChart=new Chart(document.getElementById("barChart"),{
+    type:'bar',
+    data:{ labels:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"], datasets:[{label:'Tasks Completed',data:[5,7,4,6,8,3,7],backgroundColor:'#58a6ff'}] },
+    options:{ responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}} }
+});
+const lineChart=new Chart(document.getElementById("lineChart"),{
+    type:'line',
+    data:{ labels:["Week1","Week2","Week3","Week4"], datasets:[{label:'Performance Score',data:[70,75,80,84],borderColor:'#0f62fe',fill:false,tension:0.3}] },
+    options:{ responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}} }
+});
+
+// ===== Live Chart Simulation =====
+setInterval(()=>{
+    barChart.data.datasets[0].data=barChart.data.datasets[0].data.map(d=>Math.max(0,d+Math.floor(Math.random()*3-1)));
+    barChart.update();
+    lineChart.data.datasets[0].data=lineChart.data.datasets[0].data.map(d=>Math.max(0,d+Math.floor(Math.random()*2-1)));
+    lineChart.update();
+},3000);
+
+// ===== Theme Toggle =====
+function changeTheme(value){
+    if(value==="Dark"){ document.body.classList.add("dark-theme"); document.body.classList.remove("light-theme"); }
+    else{ document.body.classList.add("light-theme"); document.body.classList.remove("dark-theme"); }
+}
+
+// ===== Floating Alerts =====
+function showAlert(msg){
+    const alert=document.createElement("div");
+    alert.className="floating-alert"; alert.textContent=msg;
+    document.body.appendChild(alert);
+    setTimeout(()=>{ alert.remove(); },3000);
+}
+// Simulate alerts
+setInterval(()=>{ if(Math.random()<0.3) showAlert("New task assigned!"); },5000);
+
+</script>
+</body>
+</html>

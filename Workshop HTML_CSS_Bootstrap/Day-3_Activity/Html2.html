@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Profile Card UI design - learningrobo</title>
+    <meta name="description" content="Profile Card UI design - learningrobo">
+    <meta name="author" content="learningrobo.com">
+    <meta name="keywords" content="profile card,Responsive,learningrobo.com,html & css projects">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type=image/x-icon href="#">
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <script src="https://kit.fontawesome.com/5d72166fb5.js" crossorigin="anonymous"></script>
+</head>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Exo 2', sans-serif;
+        margin: 0px
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100vh;
+        background-image: linear-gradient(-225deg, #6abebb 0%, #e2a0f7 100%);
+    }
+
+    .box {
+        display: flex;
+        flex-direction: column;
+        height: 560px;
+        width: 380px;
+        border-radius: 25px;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    }
+
+    .box1 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 380px;
+        height: 210px;
+        background-color: #3d3b3b;
+        border-radius: 25px 25px 0px 0px;
+        text-align: center;
+    }
+
+    .box1 img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        margin: 20px;
+        border: 5px solid transparent;
+        outline: 3px solid #1ed3ca;
+    }
+
+    .box2 {
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        row-gap: 10px;
+        width: 380px;
+        height: 350px;
+        background-color: #1ed3ca;
+        border-radius: 0px 0px 25px 25px;
+        text-align: center;
+        padding: 10px 0px;
+    }
+
+    h1,
+    h4,
+    h3 {
+        margin: 0%;
+    }
+
+    .icon i {
+        color: #121212;
+        font-size: 25px;
+        margin: 20px 10px;
+        background-color: #F8FFF8;
+        padding: 10px;
+        border-radius: 50%;
+        height: 45px;
+        width: 45px;
+    }
+
+    button {
+        width: 280px;
+        padding: 20px;
+        border-radius: 30px;
+        border: none;
+        background-color: #F8FFF8;
+        font-size: 20px;
+        margin: 20px 0px;
+    }
+
+    button:hover {
+        cursor: pointer;
+    }
+
+    @media screen and (max-width:630px) {
+        .box {
+            width: 95%;
+        }
+
+        .box1,
+        .box2 {
+            width: 100%;
+        }
+    }
+
+    .credit a {
+        text-decoration: none;
+        color: #121212;
+        font-weight: 800;
+    }
+
+    .credit {
+        color: #121212;
+        text-align: center;
+        margin-top: 10px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+    .credit span {
+        color: tomato;
+        font-size: 20px;
+    }
+</style>
+<body>
+    <!--Hello Future Developer Thanks for Using learningrobo.com, Share & Support us-->
+    <div class="container">
+        <div class="box">
+            <div class="box1">
+                <img src="jw.jpg" alt="sample logo">
+            </div>
+            <div class="box2">
+                <h1>JYOTI WALDIYA</h1>
+                <h4>BSC.IT | FIRST SEMESTER</h4>
+                <div class="icon">
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-square-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
+                <h3>KITM GROUP OF INSTITUTIONS</h3>
+                <button type="submit">CONTACT</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
